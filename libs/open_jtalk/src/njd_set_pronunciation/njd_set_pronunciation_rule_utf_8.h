@@ -427,7 +427,10 @@ static const char *njd_set_pronunciation_list[] = {
 #define NJD_SET_PRONUNCIATION_KIGOU "記号"
 #define NJD_SET_PRONUNCIATION_KAZU "数"
 
+/* 在此处定义有韵律指导意义的标点符号 */
 static const char *njd_set_pronunciation_symbol_list[] = {
+   "。", "。",
+   "！", "！",
    "？", "？",
    NULL, NULL
 };

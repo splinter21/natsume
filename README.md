@@ -45,7 +45,7 @@ phonemes = frontend.g2p(text, phoneme_mode="romaji", token_mode="phrase")
 print(" ".join(phonemes))
 ```
 
-```bash
+```
 teNkiga iikara , saNpo shimasho: .
 ```
 
@@ -58,7 +58,7 @@ phonemes = frontend.g2p(text, phoneme_mode="ipa", token_mode="phrase")
 print(" ".join(phonemes))
 ```
 
-```bash
+```
 teNkiga iikaɾa , saNpo ɕimaɕo: .
 ```
 
@@ -71,7 +71,7 @@ phonemes = frontend.g2p(text, phoneme_mode="romaji", token_mode="phrase", with_a
 print(" ".join(phonemes))
 ```
 
-```bash
+```
 teꜜNkiga iꜜikara , saꜛNpo shiꜛmashoꜜ: .
 ```
 
@@ -94,7 +94,7 @@ for mecab_feature in mecab_features:
     print("{}\t{}".format(surface, feature_string))
 ```
 
-```bash
+```
 人間	名詞,一般,*,*,*,*,人間,ニンゲン,ニンゲン,0/4,C2
 は	助詞,係助詞,*,*,*,*,は,ハ,ワ,0/1,名詞%F1/動詞%F2@0/形容詞%F2@0
 「	記号,括弧開,*,*,*,*,「,「,「,*/*,*
@@ -128,7 +128,7 @@ new = "桜、桜、うたかたに。"
 old = frontend.convert_fonts(new, reverse=False)
 print(old)
 ```
-```bash
+```
 櫻、櫻、うたかたに。
 ```
 

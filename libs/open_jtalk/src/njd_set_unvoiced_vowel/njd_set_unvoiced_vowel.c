@@ -128,6 +128,7 @@ static void get_mora_information(NJDNode * node, int index, const char **mora, N
    }
 
    /* special symbol */
+   /* TODO: 构建一个special symbols的表来遍历  */
    if (strcmp(str, NJD_SET_UNVOICED_VOWEL_TOUTEN) == 0) {
       *mora = NJD_SET_UNVOICED_VOWEL_TOUTEN;
       *flag = 0;
@@ -138,6 +139,18 @@ static void get_mora_information(NJDNode * node, int index, const char **mora, N
       *mora = NJD_SET_UNVOICED_VOWEL_QUESTION;
       *flag = 0;
       *size = strlen(NJD_SET_UNVOICED_VOWEL_QUESTION);
+      return;
+   }
+      if (strcmp(str, NJD_SET_UNVOICED_VOWEL_KUTEN) == 0) {
+      *mora = NJD_SET_UNVOICED_VOWEL_KUTEN;
+      *flag = 0;
+      *size = strlen(NJD_SET_UNVOICED_VOWEL_KUTEN);
+      return;
+   }
+   if (strcmp(str, NJD_SET_UNVOICED_VOWEL_KANTAN) == 0) {
+      *mora = NJD_SET_UNVOICED_VOWEL_KANTAN;
+      *flag = 0;
+      *size = strlen(NJD_SET_UNVOICED_VOWEL_KANTAN);
       return;
    }
 
