@@ -1,3 +1,7 @@
+Source code of OpenJTalk frontend, without JPCommon. 
+
+Below is the README file from the [original project](https://github.com/r9y9/open_jtalk).
+
 # open_jtalk
 
 [![C/C++ CI](https://github.com/r9y9/open_jtalk/actions/workflows/ccpp.yaml/badge.svg)](https://github.com/r9y9/open_jtalk/actions/workflows/ccpp.yaml)
