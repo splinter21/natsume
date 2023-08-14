@@ -1,5 +1,7 @@
 # Natsume/棗
 
+[![PyPI](https://img.shields.io/pypi/v/natsume.svg)](https://pypi.python.org/pypi/natsume)
+
 ## Introduction
 
 Natsume is a toolkit for Japanese text frontend processing. It's based on the open source project [OpenJTalk](http://open-jtalk.sp.nitech.ac.jp/) and its python wrapper [pyopenjalk](https://github.com/r9y9/pyopenjtalk).
@@ -14,9 +16,11 @@ Also, Natsume provides some other functions, including one converting Japanese n
 - cmake 
 - cython
 
-## Supported Platforms
+## Platforms
 
 - Mac OSX
+
+- Linux
 
 ## Installation
 
