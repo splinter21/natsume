@@ -17,7 +17,7 @@ from setuptools import Extension, find_packages, setup
 
 # Reference: https://github.com/r9y9/pyopenjtalk/blob/master/setup.py
 
-version = "0.0.2-dev"
+version = "0.0.2"
 min_cython_ver = "0.21.0"
 
 try:
@@ -50,15 +50,15 @@ else:
 # open_jtalk sources
 src_top = join("libs", "open_jtalk", "src")
 
-if not exists(join(src_top, "mecab", "src", "config.h")):
-    cwd = os.getcwd()
-    build_dir = join(src_top, "build")
-    os.makedirs(build_dir, exist_ok=True)
-    os.chdir(build_dir)
+# if not exists(join(src_top, "mecab", "src", "config.h")):
+#     cwd = os.getcwd()
+#     build_dir = join(src_top, "build")
+#     os.makedirs(build_dir, exist_ok=True)
+#     os.chdir(build_dir)
 
-    r = run(["cmake", "..", "-DHTS_ENGINE_INCLUDE_DIR=.", "-DHTS_ENGINE_LIB=dummy"])
-    r.check_returncode()
-    os.chdir(cwd)
+#     r = run(["cmake", "..", "-DHTS_ENGINE_INCLUDE_DIR=.", "-DHTS_ENGINE_LIB=dummy"])
+#     r.check_returncode()
+#     os.chdir(cwd)
 
 all_src = []
 include_dirs = []
@@ -101,20 +101,20 @@ ext_modules = [
 
 # Adapted from https://github.com/pytorch/pytorch
 cwd = os.path.dirname(os.path.abspath(__file__))
-if os.getenv("PYOPENJTALK_BUILD_VERSION"):
-    version = os.getenv("PYOPENJTALK_BUILD_VERSION")
-else:
-    try:
-        sha = (
-            subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=cwd)
-            .decode("ascii")
-            .strip()
-        )
-        version += "+" + sha[:7]
-    except subprocess.CalledProcessError:
-        pass
-    except IOError:  # FileNotFoundError for python 3
-        pass
+# if os.getenv("PYOPENJTALK_BUILD_VERSION"):
+#     version = os.getenv("PYOPENJTALK_BUILD_VERSION")
+# else:
+#     try:
+#         sha = (
+#             subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=cwd)
+#             .decode("ascii")
+#             .strip()
+#         )
+#         version += "+" + sha[:7]
+#     except subprocess.CalledProcessError:
+#         pass
+#     except IOError:  # FileNotFoundError for python 3
+#         pass
 
 class build_py(setuptools.command.build_py.build_py):
     def run(self):

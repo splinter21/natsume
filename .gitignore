@@ -1,6 +1,7 @@
 # development
 openjtalk.cpp
 main.py
+version.py
 
 # Mac
 .DS_store
