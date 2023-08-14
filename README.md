@@ -8,6 +8,16 @@ Natsume mainly focuses on grapheme-to-phoneme (g2p) conversion and accent annota
 
 Also, Natsume provides some other functions, including one converting Japanese new fonts to old fonts.
 
+## Build Requirements
+
+- C/C++ compilers
+- cmake 
+- cython
+
+## Supported Platforms
+
+- Mac OSX
+
 ## Installation
 
 ```bash
@@ -130,7 +140,9 @@ print(old)
 
 ## References
 
-https://en.wikipedia.org/wiki/Hiragana#Table_of_hiragana
-
-https://github.com/amanoese/kana2ipa
+- [OpenJTalk](https://open-jtalk.sourceforge.net/)
+- [pyopenjtalk](https://github.com/r9y9/pyopenjtalk)
+- [OpenJTalkの解析資料](https://www.negi.moe/negitalk/openjtalk.html)
+- [Wikipedia: Hiragana](https://en.wikipedia.org/wiki/Hiragana)
+- [新旧字体対照表](https://hagitaka.work/wp-content/uploads/2021/07/%E6%96%B0%E6%97%A7%E5%AD%97%E4%BD%93%E5%AF%BE%E7%85%A7%E8%A1%A8-1.pdf)
 

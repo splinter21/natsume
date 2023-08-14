@@ -1,6 +1,6 @@
 Source code of OpenJTalk frontend, without JPCommon. 
 
-Below is the README file from the [original project](https://github.com/r9y9/open_jtalk).
+Below is the README file from [r9y9's modified version of OpenJTalk](https://github.com/r9y9/open_jtalk).
 
 # open_jtalk
 
