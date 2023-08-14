@@ -6,6 +6,7 @@ natsume/version.py
 
 # Mac
 .DS_store
+natsume/.DS_store
 
 # PyPI
 .pypirc
