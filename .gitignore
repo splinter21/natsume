@@ -1,7 +1,8 @@
 # development
-openjtalk.cpp
 main.py
-version.py
+natsume/openjtalk.cpp
+natsume/version.py
+
 
 # Mac
 .DS_store

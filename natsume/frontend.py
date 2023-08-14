@@ -5,8 +5,8 @@ from natsume.utils import (
 
 class Natsume(object):
     def __init__(self,
-                 dict_dir="/Users/hurui05/Desktop/natsume/natsume/naist-jdic".encode("utf-8")):
-        self._oj = OpenjtalkFrontend(dict_dir)
+                 dict_name=None):
+        self._oj = OpenjtalkFrontend(dict_name)
         self._g2p_modes = ["romaji", "ipa"]
         self._token_modes = ["word", "phrase"]
 
@@ -60,15 +60,8 @@ class Natsume(object):
 
         return njd_features
 
+    def set_dict_dir(self, dict_dir):
+        # TODO: support mannualy setting dictionary directory
+        pass
 
-if __name__ == "__main__":
-    frontend = Natsume()
-    text = "そうじゃなくて。"
-    print(frontend.g2p(text, phoneme_mode="ipa", token_mode="phrase", with_accent=True))
-    
-    # phonemes = frontend.g2p(text, phoneme_mode="ipa", token_mode="phrase")
-    # print(phonemes)
 
-    # mecab_features = frontend.text2mecab(text)
-    # for f in mecab_features:
-    #     print(f)

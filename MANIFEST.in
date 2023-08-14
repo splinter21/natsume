@@ -1,0 +1,4 @@
+include README.md LICENSE
+recursive-include natsume *.cpp *.pxd *.md *.pyx
+recursive-include libs *.cpp *.c *.h README LICENSE COPYING CMakeLists.txt *.in
+exclude lib/open_jtalk/src/mecab/src/config.h
