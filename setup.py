@@ -17,7 +17,7 @@ from setuptools import Extension, find_packages, setup
 
 # Reference: https://github.com/r9y9/pyopenjtalk/blob/master/setup.py
 
-version = "0.0.1-dev2"
+version = "0.0.1-dev8"
 min_cython_ver = "0.21.0"
 
 try:
@@ -99,22 +99,8 @@ ext_modules = [
     )
 ]
 
-# Adapted from https://github.com/pytorch/pytorch
+
 cwd = os.path.dirname(os.path.abspath(__file__))
-# if os.getenv("PYOPENJTALK_BUILD_VERSION"):
-#     version = os.getenv("PYOPENJTALK_BUILD_VERSION")
-# else:
-#     try:
-#         sha = (
-#             subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=cwd)
-#             .decode("ascii")
-#             .strip()
-#         )
-#         version += "+" + sha[:7]
-#     except subprocess.CalledProcessError:
-#         pass
-#     except IOError:  # FileNotFoundError for python 3
-#         pass
 
 class build_py(setuptools.command.build_py.build_py):
     def run(self):

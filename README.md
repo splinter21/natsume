@@ -24,6 +24,8 @@ Also, Natsume provides some other functions, including one converting Japanese n
 pip install natsume
 ```
 
+If you're having problems installing, please refer to [common problems](docs/common_problems.md)
+
 ## Usage
 
 ### Grapheme-to-Phoneme

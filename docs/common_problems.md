@@ -1,8 +1,7 @@
 # Common Questions
 
-## Import error
 
-### 1 Incompatible architecture
+### ImportError: incompatible architecture
 
 Successfully installed Natsume using `pip install natsume` but got an error when importing.
 
@@ -19,7 +18,7 @@ Traceback (most recent call last):
 ImportError: dlopen(/Users/username/anaconda3/lib/python3.10/site-packages/natsume/openjtalk.cpython-310-darwin.so, 0x0002): tried: '/Users/username/anaconda3/lib/python3.10/site-packages/natsume/openjtalk.cpython-310-darwin.so' (mach-o file, but is an incompatible architecture (have 'x86_64', need 'arm64')), '/System/Volumes/Preboot/Cryptexes/OS/Users/username/anaconda3/lib/python3.10/site-packages/natsume/openjtalk.cpython-310-darwin.so' (no such file), '/Users/username/anaconda3/lib/python3.10/site-packages/natsume/openjtalk.cpython-310-darwin.so' (mach-o file, but is an incompatible architecture (have 'x86_64', need 'arm64'))
 ```
 
-if your are using Mac OSX, try the following commands.
+If your are using Mac OSX, try the following commands.
 
 ```bash
 pip uninstall natsume
