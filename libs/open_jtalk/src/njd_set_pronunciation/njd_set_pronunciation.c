@@ -106,24 +106,29 @@ void njd_set_pronunciation(NJD * njd)
 
    for (node = njd->head; node != NULL; node = node->next) {
       if (NJDNode_get_mora_size(node) == 0) {
+         /* 音节数为0，没有发音信息 */
          NJDNode_set_read(node, NULL);
          NJDNode_set_pron(node, NULL);
          /* if the word is kana, set them as filler */
          {
             str = NJDNode_get_string(node);
             len = strlen(str);
+            /* 遍历surface string中的每一个字符 */
             for (pos = 0; pos < len;) {
+               /* 从pronunciation list中查找是否有匹配的假名 */
                for (i = 0, j = 0; njd_set_pronunciation_list[i] != NULL; i += 3) {
                   j = strtopcmp(&str[pos], njd_set_pronunciation_list[i]);
                   if (j > 0)
                      break;
                }
                if (j > 0) {
+                  /* 查找到了，为其设定读音、发音和音节数 */
                   pos += j;
                   NJDNode_add_read(node, (char *) njd_set_pronunciation_list[i + 1]);
                   NJDNode_add_pron(node, (char *) njd_set_pronunciation_list[i + 1]);
                   NJDNode_add_mora_size(node, atoi(njd_set_pronunciation_list[i + 2]));
                } else {
+                  /* 否则直接跳过这个字符，不为其添加发音信息 */
                   pos++;
                }
             }
@@ -156,9 +161,10 @@ void njd_set_pronunciation(NJD * njd)
          }
       }
    }
+   /* 移除静音节点 */
    NJD_remove_silent_node(njd);
 
-   /* chain kana sequence */
+   /* 连接假名序列，将它们存放到一个NJDNode中 */
    {
       NJDNode *head_of_kana_filler_sequence = NULL;
       int find;
@@ -192,8 +198,10 @@ void njd_set_pronunciation(NJD * njd)
    }
    NJD_remove_silent_node(njd);
 
+   /* 遍历整个NJDNode链表，处理一些特殊符号 */
    for (node = njd->head; node != NULL; node = node->next) {
       if (node->next != NULL
+          /* 将下一个节点设置为长音符号 */
           && strcmp(NJDNode_get_pron(node->next), NJD_SET_PRONUNCIATION_U) == 0
           && strcmp(NJDNode_get_pos(node->next), NJD_SET_PRONUNCIATION_JODOUSHI) == 0
           && (strcmp(NJDNode_get_pos(node), NJD_SET_PRONUNCIATION_DOUSHI) == 0
@@ -202,6 +210,7 @@ void njd_set_pronunciation(NJD * njd)
          NJDNode_set_pron(node->next, NJD_SET_PRONUNCIATION_CHOUON);
       }
       if (node->next != NULL
+         /* 为属于助动词的です和ます标注发音 */
           && strcmp(NJDNode_get_pos(node), NJD_SET_PRONUNCIATION_JODOUSHI) == 0
           && strcmp(NJDNode_get_string(node->next), NJD_SET_PRONUNCIATION_QUESTION) == 0) {
          if (strcmp(NJDNode_get_string(node), NJD_SET_PRONUNCIATION_DESU_STR) == 0)

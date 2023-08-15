@@ -72,6 +72,10 @@ NJD_SET_ACCENT_PHRASE_RULE_H_START;
   Rule 18 「*,接尾」は前にくっつける
 */
 
+/*
+Extra Rule 01 「名詞」は「動詞」or「形容詞」に接続する場合に前にくってける
+*/
+
 #define NJD_SET_ACCENT_PHRASE_MEISHI "名詞"
 #define NJD_SET_ACCENT_PHRASE_KEIYOUSHI "形容詞"
 #define NJD_SET_ACCENT_PHRASE_DOUSHI "動詞"

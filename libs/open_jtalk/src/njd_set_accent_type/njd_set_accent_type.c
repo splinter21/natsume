@@ -54,6 +54,7 @@ NJD_SET_ACCENT_TYPE_C_START;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "njd.h"
 #include "njd_set_accent_type.h"
@@ -100,7 +101,50 @@ static char get_token_from_string(const char *str, int *index, char *buff)
    return c;
 }
 
-static void get_rule(const char *input_rule, const char *prev_pos, char *rule, int *add_type)
+
+/*
+TODO
+1. 更新解析函数get_rule
+2. 添加Mn@M
+3. 实现部分规则
+*/
+
+// static void get_rule(const char *input_rule, const char *prev_pos, char *rule, int *add_type)
+// {
+//    int index = 0;
+//    char buff[MAXBUFLEN];
+//    char c = ' ';
+
+//    if (input_rule) {
+//       while (c != '\0') {
+//          c = get_token_from_string(input_rule, &index, buff);
+//          if ((c == '%' && strstr(prev_pos, buff) != NULL) || c == '@' || c == '/' || c == '\0') {
+//             /* find */
+//             if (c == '%')
+//                c = get_token_from_string(input_rule, &index, rule);
+//             else
+//                strcpy(rule, buff);
+//             if (c == '@') {
+//                c = get_token_from_string(input_rule, &index, buff);
+//                (*add_type) = atoi(buff);
+//             } else {
+//                (*add_type) = 0;
+//             }
+//             return;
+//          } else {
+//             /* skip */
+//             while (c == '%' || c == '@')
+//                c = get_token_from_string(input_rule, &index, buff);
+//          }
+//       }
+//    }
+
+//    /* not found */
+//    strcpy(rule, "*");
+//    (*add_type) = 0;
+// }
+
+static void get_rule(const char *input_rule, const char *prev_pos, char *rule, char *add_type)
 {
    int index = 0;
    char buff[MAXBUFLEN];
@@ -117,9 +161,9 @@ static void get_rule(const char *input_rule, const char *prev_pos, char *rule, i
                strcpy(rule, buff);
             if (c == '@') {
                c = get_token_from_string(input_rule, &index, buff);
-               (*add_type) = atoi(buff);
+               strcpy(add_type, buff);
             } else {
-               (*add_type) = 0;
+               *add_type = '0';
             }
             return;
          } else {
@@ -132,14 +176,26 @@ static void get_rule(const char *input_rule, const char *prev_pos, char *rule, i
 
    /* not found */
    strcpy(rule, "*");
-   (*add_type) = 0;
+   (*add_type) = '0';
 }
+
+// for rule F6
+static int split_rule(const char *add_type, bool use_a) {
+    int add_type_a, add_type_b = 0;
+    sscanf(add_type, "%d|%d", &add_type_a, &add_type_b);
+    if (use_a) 
+        return add_type_a;
+    else
+        return add_type_b;
+}
+
 
 void njd_set_accent_type(NJD * njd)
 {
    NJDNode *node;
    NJDNode *top_node = NULL;
    char rule[MAXBUFLEN];
+   char add_type_string[MAXBUFLEN];
    int add_type = 0;
    int mora_size = 0;
 
@@ -150,48 +206,176 @@ void njd_set_accent_type(NJD * njd)
       if (NJDNode_get_string(node) == NULL)
          continue;
       if ((node == njd->head) || (NJDNode_get_chain_flag(node) != 1)) {
-         /* store the top node */
+         /* store the top node 韵律词的第一个单词的node */
          top_node = node;
          mora_size = 0;
       } else if (node->prev != NULL && NJDNode_get_chain_flag(node) == 1) {
-         /* get accent change type */
-         get_rule(NJDNode_get_chain_rule(node), NJDNode_get_pos(node->prev), rule, &add_type);
+         /* 获取当前单词的chain rule和前一个单词的词性 */
+         get_rule(NJDNode_get_chain_rule(node), NJDNode_get_pos(node->prev), rule, add_type_string);
 
          /* change accent type */
-         if (strcmp(rule, "*") == 0) {  /* no chnage */
-         } else if (strcmp(rule, "F1") == 0) {  /* for ancillary word */
-         } else if (strcmp(rule, "F2") == 0) {
+         if (strcmp(rule, "*") == 0) 
+         {  
+            /* no chnage */
+         } 
+         else if (strcmp(rule, "F1") == 0) 
+         {  
+            /* 
+            从属型　
+            Mc = M1 
+            */
+         } 
+         else if (strcmp(rule, "F2") == 0) 
+         {
+            /* 
+            不完全支配型 
+            Mc = N1 + M~2 (M1 == 0)
+            Mc = M1 (M1 != 0) 
+            */
+           add_type = atoi(add_type_string);
             if (NJDNode_get_acc(top_node) == 0)
                NJDNode_set_acc(top_node, mora_size + add_type);
-         } else if (strcmp(rule, "F3") == 0) {
+         } 
+         else if (strcmp(rule, "F3") == 0) 
+         {
+            /*
+            融合型
+            Mc = M1 (M1 == 0)
+            Mc = N1 + M~2 (M1 != 0)
+            */
+            add_type = atoi(add_type_string);
             if (NJDNode_get_acc(top_node) != 0)
                NJDNode_set_acc(top_node, mora_size + add_type);
-         } else if (strcmp(rule, "F4") == 0) {
+         } 
+         else if (strcmp(rule, "F4") == 0) 
+         {
+            /*
+            支配型
+            Mc = N1 + M~2
+            */
+            add_type = atoi(add_type_string);
             NJDNode_set_acc(top_node, mora_size + add_type);
-         } else if (strcmp(rule, "F5") == 0) {
+         } 
+         else if (strcmp(rule, "F5") == 0) 
+         {
+            /*
+            平板化型
+            Mc = 0
+            */
             NJDNode_set_acc(top_node, 0);
-         } else if (strcmp(rule, "C1") == 0) {  /* for noun */
+         } 
+         else if (strcmp(rule, "F6") == 0)
+         {
+            /* 
+            F6@M~2a｜M~2b
+            Mc = N1 + M~2a (M1 == 0)
+            Mc = N1 + M~2b (M1 != 0)
+            */
+            if (NJDNode_get_acc(top_node) == 0)
+               add_type = split_rule(add_type_string, true);
+            else
+               add_type = split_rule(add_type_string, false);
+            NJDNode_set_acc(top_node, mora_size + add_type);
+         }
+         else if (strcmp(rule, "C1") == 0) 
+         {  
+            /*
+            自立语结合保存型
+            Mc = N1 + M2
+            */
             NJDNode_set_acc(top_node, mora_size + NJDNode_get_acc(node));
-         } else if (strcmp(rule, "C2") == 0) {
+         } 
+         else if (strcmp(rule, "C2") == 0) 
+         {
+            /*
+            自立语结合生起型
+            Mc = N1 + 1
+            */
             NJDNode_set_acc(top_node, mora_size + 1);
-         } else if (strcmp(rule, "C3") == 0) {
+         } 
+         else if (strcmp(rule, "C3") == 0) 
+         {
+            /*
+            接辞结合标准型
+            Mc = N1
+            */
             NJDNode_set_acc(top_node, mora_size);
-         } else if (strcmp(rule, "C4") == 0) {
+         } 
+         else if (strcmp(rule, "C4") == 0) 
+         {
+            /*
+            接辞结合平板化型
+            Mc = 0
+            */
             NJDNode_set_acc(top_node, 0);
-         } else if (strcmp(rule, "C5") == 0) {
-         } else if (strcmp(rule, "P1") == 0) {  /* for postfix */
+         } 
+         else if (strcmp(rule, "C5") == 0) 
+         {
+            /*
+            从属型
+            Mc = M1
+            */
+         } 
+         else if (strcmp(rule, "P1") == 0) 
+         {  
+            /*
+            一体化型
+            Mc = 0 (M2 == 0 or M2 == N2)
+            Mc = N1 + M2 (M2 != 0 and M2 != N2)
+            */
             if (NJDNode_get_acc(node) == 0)
                NJDNode_set_acc(top_node, 0);
             else
                NJDNode_set_acc(top_node, mora_size + NJDNode_get_acc(node));
-         } else if (strcmp(rule, "P2") == 0) {
-            if (NJDNode_get_acc(node) == 0)
+         } 
+         else if (strcmp(rule, "P2") == 0) 
+         {
+            /*
+            自立语结合型
+            Mc = N1 + 1 (M2 == 0 or M2 == N2)
+            Mc = N1 + M2 (M2 != 0 and M2 != N2)
+            */
+            if (NJDNode_get_acc(node) == 0 
+               || NJDNode_get_acc(node) == NJDNode_get_mora_size(node))
                NJDNode_set_acc(top_node, mora_size + 1);
             else
                NJDNode_set_acc(top_node, mora_size + NJDNode_get_acc(node));
-         } else if (strcmp(rule, "P6") == 0) {
+         } 
+         else if (strcmp(rule, "P4") == 0)
+         {
+            /*
+            混合型
+            Mc = N1 + 1 (M2 != 0 and M2 != N2)
+            Mc = N1 + M2 (M2 == 0 or M2 == N2)
+            */
+            if (NJDNode_get_acc(node) == 0 
+               || NJDNode_get_acc(node) == NJDNode_get_mora_size(node))
+               NJDNode_set_acc(top_node, mora_size + NJDNode_get_acc(node));
+            else
+               NJDNode_set_acc(top_node, mora_size + 1);    
+            
+         }
+         else if (strcmp(rule, "P6") == 0) 
+         {
+            /*
+            平板型
+            Mc = 0
+            */
             NJDNode_set_acc(top_node, 0);
-         } else if (strcmp(rule, "P14") == 0) {
+         } 
+         else if (strcmp(rule, "P13") == 0)
+         {
+            /*
+            分离型1
+            Mc = M1
+            */
+         }
+         else if (strcmp(rule, "P14") == 0) 
+         {
+            /*
+            分离型2
+            Mc = N1 + M2
+            */
             if (NJDNode_get_acc(node) != 0)
                NJDNode_set_acc(top_node, mora_size + NJDNode_get_acc(node));
          }

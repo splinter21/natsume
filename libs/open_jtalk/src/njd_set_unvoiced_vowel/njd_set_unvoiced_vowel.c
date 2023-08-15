@@ -154,6 +154,9 @@ static void get_mora_information(NJDNode * node, int index, const char **mora, N
       return;
    }
 
+
+
+
    /* reset */
    *mora = NULL;
    *flag = -1;
